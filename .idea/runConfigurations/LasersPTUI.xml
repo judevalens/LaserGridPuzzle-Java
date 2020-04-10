@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LasersPTUI" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+    <option name="MAIN_CLASS_NAME" value="lasers.ptui.LasersPTUI" />
+    <module name="Lasers" />
+    <option name="PROGRAM_PARAMETERS" value="data/safe.0.0" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="lasers.ptui.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
