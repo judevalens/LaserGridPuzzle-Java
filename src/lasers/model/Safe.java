@@ -11,8 +11,6 @@ public class Safe {
     String[][] safeMatrixSol;
     public Safe(String safePath){
         createSafe(safePath);
-        System.out.println(safeMatrix.toString());
-        System.out.println(safeMatrixSol.toString());
     }
 
     public void createSafe(String safePath){
@@ -39,7 +37,6 @@ public class Safe {
 
                     for(int r = 0; r < row; r++){
                         String dataRow = myReader.nextLine();
-                        System.out.println("DATA ROW : " + dataRow);
                         int c2 = 0;
                         for(int c = 0; c < col+col-1; c += 2){
                             safeMatrix[r][c2] = dataRow.substring(c,c+1);
@@ -55,7 +52,6 @@ public class Safe {
 
                     for(int r = 0; r < row; r++){
                         String dataRow = myReader.nextLine();
-                        System.out.println("DATA ROW 2: " + dataRow);
 
                         int c2 = 0;
                         for(int c = 2; c < (col+2)+(col-1); c += 2){
@@ -76,7 +72,10 @@ public class Safe {
         }
     }
 
-
+    public void addLaser(int row, int col){
+        safeMatrix[row][col] = "L";
+    }
+   
     public String[][] getMatrix(){
 return safeMatrixSol;
     }
