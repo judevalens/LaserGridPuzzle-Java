@@ -1,18 +1,64 @@
 package lasers.ptui;
 
-import lasers.model.Safe;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
+import lasers.model.Safe;
 public class LasersPTUI {
     /**
      * The main method
+     * 
      * @param args command line arguments
      */
+    static Safe safe;
+
+
+    public LasersPTUI(String safePath, String inputPath){
+        safe = new Safe(safePath);
+    }
+
+   
+
     public static void main(String[] args) {
         // check sanity of input
         if (args.length < 1 || args.length > 2) {
             System.out.println("Usage: java LasersPTUI safe-file [input]");
         } else {
-            // TODO
+            
+            if(args.length == 1){
+                new LasersPTUI(args[0],null);
+            }else{
+                new LasersPTUI(args[0],args[1]);
+            }
         }
+    }
+
+    public static void printMatrix(){
+        String[][] mat = safe.getMatrix();
+
+        for(int r = 0; r < mat.length; r++){
+            for(int c = 0;)
+        }
+    }
+
+    public void readFile(String path, String type) {
+
+        File myObj = new File(path);
+        Scanner myReader;
+        try {
+            myReader = new Scanner(myObj);
+
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                System.out.println(data);
+              }
+              myReader.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+
     }
 }
