@@ -40,8 +40,10 @@ public class Safe {
                     for(int r = 0; r < row; r++){
                         String dataRow = myReader.nextLine();
                         System.out.println("DATA ROW : " + dataRow);
-                        for(int c = 0; c < col; c++){
-                            safeMatrix[r][c] = dataRow.substring(c,c+1);
+                        int c2 = 0;
+                        for(int c = 0; c < col+col-1; c += 2){
+                            safeMatrix[r][c2] = dataRow.substring(c,c+1);
+                            c2++;
                         }
                     }
 
@@ -53,9 +55,12 @@ public class Safe {
 
                     for(int r = 0; r < row; r++){
                         String dataRow = myReader.nextLine();
+                        System.out.println("DATA ROW 2: " + dataRow);
 
-                        for(int c = 0; c < col; c++){
-                            safeMatrixSol[r][c] = dataRow.substring(c,c+1);
+                        int c2 = 0;
+                        for(int c = 2; c < (col+2)+(col-1); c += 2){
+                            safeMatrixSol[r][c2] = dataRow.substring(c,c+1);
+                            c2++;
                         }
                     }
 
@@ -73,7 +78,7 @@ public class Safe {
 
 
     public String[][] getMatrix(){
-return safeMatrix;
+return safeMatrixSol;
     }
 
 }

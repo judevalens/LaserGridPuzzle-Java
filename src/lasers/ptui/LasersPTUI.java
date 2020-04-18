@@ -28,6 +28,7 @@ public class LasersPTUI {
             
             if(args.length == 1){
                 new LasersPTUI(args[0],null);
+                printMatrix();
             }else{
                 new LasersPTUI(args[0],args[1]);
             }
@@ -38,7 +39,10 @@ public class LasersPTUI {
         String[][] mat = safe.getMatrix();
 
         for(int r = 0; r < mat.length; r++){
-            for(int c = 0;)
+            for(int c = 0; c < mat[0].length;c++){
+                System.out.print(mat[r][c] + " ");
+            }
+            System.out.println();
         }
     }
 
