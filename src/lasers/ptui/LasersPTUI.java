@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 import lasers.model.Safe;
+import lasers.model.Safe.Coordinate;
 
 public class LasersPTUI {
     /**
@@ -29,6 +30,7 @@ public class LasersPTUI {
 
             if (args.length == 1) {
                 new LasersPTUI(args[0], null);
+                inputType = 1;
                 input(null);
             } else {
                 new LasersPTUI(args[0], args[1]);
@@ -39,7 +41,7 @@ public class LasersPTUI {
     }
 
     public static void printMatrix(Safe safe) {
-        String[][] mat = safe.getMatrix();
+        Coordinate[][] mat = safe.getMatrix();
         
         for (int r = 0; r < mat.length+2; r++) {
             for (int c = 0; c < mat[0].length+2; c++) {
@@ -50,7 +52,7 @@ public class LasersPTUI {
                     }else if(c == 1){
                         System.out.print("|");
                     }else {
-                        System.out.print(mat[r-2][c-2] + " ");
+                        System.out.print(mat[r-2][c-2].getELement() + " ");
                     }
                 }else{
                     if(r == 0){
@@ -120,8 +122,7 @@ public class LasersPTUI {
         }
 
         sc = new Scanner(System.in);
-        if(sc.hasNextLine()){
-            
+        if(sc.hasNextLine()){ 
             command = sc.nextLine();
             commands = command.split(" ");
             excutor(commands, 1);
