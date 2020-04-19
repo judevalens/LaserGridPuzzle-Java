@@ -2,6 +2,8 @@ package lasers.ptui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 import lasers.model.Safe;
@@ -15,7 +17,7 @@ public class LasersPTUI {
 
 
     public LasersPTUI(String safePath, String inputPath){
-        safe = new Safe(safePath);
+        safe = new Safe(safePath,this);
     }
 
    
@@ -65,4 +67,57 @@ public class LasersPTUI {
         
 
     }
+
+    public void update(Safe model, String status) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void input(String inputPath){
+        if(inputPath != null){
+        Path path = Paths.get("data/"+inputPath);
+        File myObj = new File(path.toString());
+        Scanner myReader;
+        try {
+            myReader = new Scanner(myObj);
+
+            while (myReader.hasNextLine()) {
+                String command = myReader.nextLine();
+                System.out.println(command);
+
+
+                String[] commands = command.split(" ");
+
+                if
+
+
+            
+
+
+              }
+              myReader.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    }
+    
+
+
+    
+    public void excutor(String command,Integer row, Integer col){
+        if(c)
+
+    }
+
+    enum Command{
+        a,
+        d,
+        h,
+        r,
+        v,
+        q
+    }
+
 }

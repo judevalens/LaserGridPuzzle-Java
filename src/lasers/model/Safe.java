@@ -6,10 +6,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+import lasers.ptui.LasersPTUI;
+
 public class Safe {
     String[][] safeMatrix;
     String[][] safeMatrixSol;
-    public Safe(String safePath){
+    LasersPTUI lasersPTUI;
+    public Safe(String safePath, LasersPTUI lasersPTUI){
+        this.lasersPTUI =  lasersPTUI;
         createSafe(safePath);
     }
 
