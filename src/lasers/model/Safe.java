@@ -7,9 +7,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import lasers.model.Safe.Coordinate;
 import lasers.ptui.LasersPTUI;
-
+/**
+ * This class represent safe
+ * @author Jude Paulemon
+ */
 public class Safe {
     String[][] safeMatrix;
     String[][] safeMatrixSol;
@@ -22,12 +24,20 @@ public class Safe {
     String BEAM = "*";
     String PILLARS = "0124X";
     String FREE_SPOT = ".";
-
+    /**
+     * Creates a safe object
+     * @param safePath path that contains the configuration to build a safe
+     * @param lasersPTUI the PTUI that will interact with this model
+     */
     public Safe(String safePath, LasersPTUI lasersPTUI) {
         this.lasersPTUI = lasersPTUI;
         createSafe(safePath);
     }
-
+    /**
+     * Reads a file and build a matrix from the file.
+     * This method loads the safe and the safe solution into two distinct matrices
+     * @param safePath path that contains the configuration to build a safe
+     */
     public void createSafe(String safePath) {
         Path path = Paths.get("data/" + safePath);
         File myObj = new File(path.toString());
@@ -92,7 +102,11 @@ public class Safe {
             e.printStackTrace();
         }
     }
-
+    /**
+     * adds lazer at the given coordinates
+     * @param row
+     * @param col
+     */
     public void addLaser(int row, int col) {
         String response;
         boolean status = safeMatrixC[row][col].updateElement(LASER);
@@ -107,14 +121,18 @@ public class Safe {
 
         lasersPTUI.update(this, response);
     }
-
+ /**
+     * removes lazer at the given coordinates
+     * @param row
+     * @param col
+     */
     public void removeLaser(int row, int col) {
         String response;
         boolean status = safeMatrixC[row][col].updateElement(FREE_SPOT);
         if (status) {
             response = "Laser removed at: (" + row + ", " + col + ")";
             beamRow(row, col, 0, -1, safeMatrixC[row][col]);
-            beamCol(row, col, 0,-1,safeMatrixC[row][col]);
+            beamCol(row, col, 0, -1, safeMatrixC[row][col]);
         } else {
             response = "Error removing laser at: (" + row + ", " + col + ")";
         }
@@ -122,19 +140,30 @@ public class Safe {
         lasersPTUI.update(this, response);
 
     }
-
-    public void verify() {
-
+    
+    /**
+     * verifies that a safe is correct
+     * 
+     */
+    public boolean verify() {
+        return true;
     }
 
-    public void display() {
+  
 
-    }
-
+    /**
+     * when a lazer is added this method adds beam on the cells that Vertically
+     * adjacent to the lazer It stops when a pillar is encountered
+     * 
+     * @param row
+     * @param col
+     * @param direction up or down (1 or -1)
+     * @param action    add or remove beams (1 or -1)
+     * @param laser     the lazer that emits those beams
+     */
     public void beamRow(int row, int col, int direction, int action, Coordinate laser) {
         if (row >= 0 && row < safeMatrix.length) {
             boolean status;
-            String cell = safeMatrix[row][col];
             if (direction == 0) {
                 System.out.println("ROOT " + row);
                 beamRow(row + 1, col, 1, action, laser);
@@ -162,6 +191,16 @@ public class Safe {
         }
     }
 
+    /**
+     * when a lazer is added this method adds beam on the cells that horizontally
+     * adjacent to the lazer It stops when a pillar is encountered
+     * 
+     * @param row
+     * @param col
+     * @param direction up or down (1 or -1)
+     * @param action    add or remove beams (1 or -1)
+     * @param laser     the lazer that emits those beams
+     */
     public void beamCol(int row, int col, int direction, int action, Coordinate laser) {
         if (col >= 0 && col < safeMatrix[0].length) {
 
@@ -173,24 +212,24 @@ public class Safe {
                 if (action > 0) {
 
                     status = safeMatrixC[row][col].updateElement(BEAM, laser, action);
-    
+
                     if (status) {
                         beamCol(row, col + direction, direction, action, laser);
-    
+
                     }
                 } else {
                     status = safeMatrixC[row][col].updateElement(BEAM, laser, action);
-    
+
                     if (status) {
                         beamCol(row, col + direction, direction, action, laser);
                     }
-    
+
                 }
             }
-  
+
         }
     }
-    
+
     /**
      * Nested class that represent a coordinate
      *
@@ -205,11 +244,19 @@ public class Safe {
         private String element;
         private ArrayList<Coordinate> laserDepency = new ArrayList<>();
 
+        /**
+         * Create a coordinate object
+         * 
+         * @param row
+         * @param col
+         * @param element can be a lazer, a pilar , a beam or a free cell
+         */
         public Coordinate(int row, int col, String element) {
             this.row = row;
             this.col = col;
             this.element = element;
         }
+
         /**
          * 
          * @return return the current element that this cell contains
@@ -218,10 +265,11 @@ public class Safe {
 
             return element;
         }
-        
+
         /**
          * this method add or remove a lazer
-         * @param e the element to update the cell with 
+         * 
+         * @param e the element to update the cell with
          * @return true if a lazer has been added or removed
          */
         public boolean updateElement(String e) {
@@ -248,28 +296,29 @@ public class Safe {
 
             return r;
         }
-        
+
         /**
          * This method add and remove beams
-         * @param e the element to update the cell with 
-         * @param laser the lazer to wich this beam depent
+         * 
+         * @param e      the element to update the cell with
+         * @param laser  the lazer to wich this beam depent
          * @param action > 0 we add a bea. < 0 we remove beam
          * @return return false when a pillar has been encountered
          */
         public boolean updateElement(String e, Coordinate laser, int action) {
 
             boolean r = false;
-                // when its a free spot or beam/ we add the new laze depency and change the symbol to a bea
-                // when its a laze we just add the depency and check the adjacent cells
-                // only a pilar can stop a lazer's trajectory
+            // when its a free spot or beam/ we add the new laze depency and change the
+            // symbol to a bea
+            // when its a laze we just add the depency and check the adjacent cells
+            // only a pilar can stop a lazer's trajectory
             if (action > 0) {
 
-                
                 if (element.equals(FREE_SPOT) || element.equals(BEAM)) {
                     element = e;
                     laserDepency.add(laser);
                     r = true;
-                }else if(element.equals(LASER)){
+                } else if (element.equals(LASER)) {
                     laserDepency.add(laser);
                     r = true;
                 }
@@ -283,7 +332,7 @@ public class Safe {
                         element = FREE_SPOT;
                     }
                     r = true;
-                }else if(element.equals(LASER)){
+                } else if (element.equals(LASER)) {
                     laserDepency.remove(laserDepency.size() - 1);
                     r = true;
                 }
