@@ -15,6 +15,7 @@ public class LasersPTUI {
      * @param args command line arguments
      */
     static Safe safe;
+    static int inputType = 0;
 
     public LasersPTUI(String safePath, String inputPath) {
         safe = new Safe(safePath, this);
@@ -28,19 +29,50 @@ public class LasersPTUI {
 
             if (args.length == 1) {
                 new LasersPTUI(args[0], null);
-                printMatrix();
+                input(null);
             } else {
                 new LasersPTUI(args[0], args[1]);
+                input(args[1]);
+                input(null);
             }
         }
     }
 
-    public static void printMatrix() {
+    public static void printMatrix(Safe safe) {
         String[][] mat = safe.getMatrix();
+        
+        for (int r = 0; r < mat.length+2; r++) {
+            for (int c = 0; c < mat[0].length+2; c++) {
 
-        for (int r = 0; r < mat.length; r++) {
-            for (int c = 0; c < mat[0].length; c++) {
-                System.out.print(mat[r][c] + " ");
+                if(r > 1){
+                    if(c == 0){
+                        System.out.print(String.valueOf(r-2));
+                    }else if(c == 1){
+                        System.out.print("|");
+                    }else {
+                        System.out.print(mat[r-2][c-2] + " ");
+                    }
+                }else{
+                    if(r == 0){
+                        if(c < 2){
+                            System.out.print(" ");
+                        }else{
+                            System.out.print(String.valueOf(c-2)+" ");
+                        }
+                    }else{
+                        if(c < 2){
+                            System.out.print(" ");
+                        }else{
+                            if(c<(mat[0].length+1)){
+                                System.out.print("--");
+                            }else{
+                                System.out.print("-");
+
+                            }
+                        }
+                    }
+                }
+                
             }
             System.out.println();
         }
@@ -49,9 +81,18 @@ public class LasersPTUI {
     public void update(Safe model, String status) {
         // TODO Auto-generated method stub
 
+        if(status != null){
+            System.out.println(status);
+        }
+        printMatrix(model);
+
+        if(inputType == 1){
+            input(null);
+        }
+
     }
 
-    public void input(String inputPath) {
+    public static void input(String inputPath) {
         Scanner sc;
         String command;
         String[] commands;
@@ -63,13 +104,14 @@ public class LasersPTUI {
 
                 while (sc.hasNextLine()) {
                     command = sc.nextLine();
-                    System.out.println(command);
 
                     commands = command.split(" ");
-
-                    excutor(commands, 0);
+                    inputType = 0;
+                    System.out.println("> "+command);
+                    excutor(commands, inputType);
 
                 }
+                inputType = 1;
                 sc.close();
 
             } catch (FileNotFoundException e) {
@@ -78,14 +120,18 @@ public class LasersPTUI {
         }
 
         sc = new Scanner(System.in);
-        command = sc.nextLine();
-        commands = command.split(" ");
-        excutor(commands, 1);
+        if(sc.hasNextLine()){
+            
+            command = sc.nextLine();
+            commands = command.split(" ");
+            excutor(commands, 1);
+
+        }
         sc.close();
 
     }
 
-    public void excutor(String[] commands, int index) {
+    public static void excutor(String[] commands, int index) {
         String initial = commands[index].substring(0, 1).toLowerCase();
 
         switch (initial) {
