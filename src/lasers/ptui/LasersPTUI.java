@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 import lasers.model.Safe;
+
 public class LasersPTUI {
     /**
      * The main method
@@ -15,57 +16,34 @@ public class LasersPTUI {
      */
     static Safe safe;
 
-
-    public LasersPTUI(String safePath, String inputPath){
-        safe = new Safe(safePath,this);
+    public LasersPTUI(String safePath, String inputPath) {
+        safe = new Safe(safePath, this);
     }
-
-   
 
     public static void main(String[] args) {
         // check sanity of input
         if (args.length < 1 || args.length > 2) {
             System.out.println("Usage: java LasersPTUI safe-file [input]");
         } else {
-            
-            if(args.length == 1){
-                new LasersPTUI(args[0],null);
+
+            if (args.length == 1) {
+                new LasersPTUI(args[0], null);
                 printMatrix();
-            }else{
-                new LasersPTUI(args[0],args[1]);
+            } else {
+                new LasersPTUI(args[0], args[1]);
             }
         }
     }
 
-    public static void printMatrix(){
+    public static void printMatrix() {
         String[][] mat = safe.getMatrix();
 
-        for(int r = 0; r < mat.length; r++){
-            for(int c = 0; c < mat[0].length;c++){
+        for (int r = 0; r < mat.length; r++) {
+            for (int c = 0; c < mat[0].length; c++) {
                 System.out.print(mat[r][c] + " ");
             }
             System.out.println();
         }
-    }
-
-    public void readFile(String path, String type) {
-
-        File myObj = new File(path);
-        Scanner myReader;
-        try {
-            myReader = new Scanner(myObj);
-
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-              }
-              myReader.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-
     }
 
     public void update(Safe model, String status) {
@@ -73,51 +51,67 @@ public class LasersPTUI {
 
     }
 
-    public void input(String inputPath){
-        if(inputPath != null){
-        Path path = Paths.get("data/"+inputPath);
-        File myObj = new File(path.toString());
-        Scanner myReader;
-        try {
-            myReader = new Scanner(myObj);
+    public void input(String inputPath) {
+        Scanner sc;
+        String command;
+        String[] commands;
+        if (inputPath != null) {
+            Path path = Paths.get("data/" + inputPath);
+            File myObj = new File(path.toString());
+            try {
+                sc = new Scanner(myObj);
 
-            while (myReader.hasNextLine()) {
-                String command = myReader.nextLine();
-                System.out.println(command);
+                while (sc.hasNextLine()) {
+                    command = sc.nextLine();
+                    System.out.println(command);
 
+                    commands = command.split(" ");
 
-                String[] commands = command.split(" ");
+                    excutor(commands, 0);
 
-                if
+                }
+                sc.close();
 
-
-            
-
-
-              }
-              myReader.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-    }
-    }
-    
 
-
-    
-    public void excutor(String command,Integer row, Integer col){
-        if(c)
+        sc = new Scanner(System.in);
+        command = sc.nextLine();
+        commands = command.split(" ");
+        excutor(commands, 1);
+        sc.close();
 
     }
 
-    enum Command{
-        a,
-        d,
-        h,
-        r,
-        v,
-        q
+    public void excutor(String[] commands, int index) {
+        String initial = commands[index].substring(0, 1).toLowerCase();
+
+        switch (initial) {
+            case "a":
+                safe.addLaser(Integer.parseInt(commands[index + 1]), Integer.parseInt(commands[index + 2]));
+                break;
+            case "r":
+                safe.removeLaser(Integer.parseInt(commands[index + 1]), Integer.parseInt(commands[index + 2]));
+                break;
+            case "v":
+                safe.verify();
+                break;
+            case "d":
+                safe.display();
+                break;
+            case "q":
+                System.exit(0);
+            case "h":
+                break;
+
+        }
+
+    }
+
+    enum Command {
+        a, d, h, r, v, q
     }
 
 }

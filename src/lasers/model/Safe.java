@@ -79,6 +79,18 @@ public class Safe {
     public void addLaser(int row, int col){
         safeMatrix[row][col] = "L";
     }
+
+    public void removeLaser(int row, int col){
+        safeMatrix[row][col] = "L";
+    }
+
+    public void verify(){
+
+    }
+
+    public void display(){
+        
+    }
    
     public String[][] getMatrix(){
 return safeMatrixSol;
