@@ -52,10 +52,9 @@ public class Safe {
             while (myReader.hasNextLine()) {
 
                 if (counter == 0) {
-                    String size = myReader.nextLine();
-
-                    row = Integer.parseInt(size.substring(0, 1));
-                    col = Integer.parseInt(size.substring(2, 3));
+                    String[] coordinates = myReader.nextLine().split(" ");
+                    row = Integer.parseInt(coordinates[0]);
+                    col = Integer.parseInt(coordinates[1]);
                     safeMatrix = new String[row][col];
                     safeMatrixSol = new String[row][col];
 
@@ -143,7 +142,7 @@ public class Safe {
     
     /**
      * verifies that a safe is correct
-     * 
+     * @return true if safe is correct, false otherwise
      */
     public boolean verify() {
         return true;

@@ -20,6 +20,7 @@ public class LasersPTUI {
 
     public LasersPTUI(String safePath, String inputPath) {
         safe = new Safe(safePath, this);
+        printMatrix(safe);
     }
 
     public static void main(String[] args) {
@@ -48,7 +49,7 @@ public class LasersPTUI {
 
                 if(r > 1){
                     if(c == 0){
-                        System.out.print(String.valueOf(r-2));
+                        System.out.print(String.valueOf((r-2)%10));
                     }else if(c == 1){
                         System.out.print("|");
                     }else {
@@ -59,7 +60,7 @@ public class LasersPTUI {
                         if(c < 2){
                             System.out.print(" ");
                         }else{
-                            System.out.print(String.valueOf(c-2)+" ");
+                            System.out.print(String.valueOf((c-2)%10)+" ");
                         }
                     }else{
                         if(c < 2){
@@ -146,7 +147,7 @@ public class LasersPTUI {
                 safe.verify();
                 break;
             case "d":
-                safe.display();
+                printMatrix(safe);
                 break;
             case "q":
                 System.exit(0);
