@@ -10,7 +10,7 @@ import java.util.Scanner;
 import lasers.ptui.LasersPTUI;
 
 /**
- * This class represent safe
+ * This class represents a safe
  * 
  * @author Jude Paulemon
  */
@@ -155,10 +155,10 @@ public class Safe {
      * 
      * @return true if safe is correct, false otherwise
      */
-    public boolean verify() {
+    public void verify() {
         boolean error = false;
         int r = 0;
-        int c;
+        int c = 0;
         while (r < safeMatrixC.length && !error) {
             c = 0;
             while (c < safeMatrixC[0].length) {
@@ -172,6 +172,7 @@ public class Safe {
                 } else if (PILLARS.contains(element)) {
                     if (!element.equals("X")) {
                         if (cell.getAdjacentLasers() != cell.getPillarNumber()) {
+                            System.out.println(" AdjacentLasers " + cell.getAdjacentLasers() + "PillarNumber " + cell.getPillarNumber());
                             error = true;
                             break;
                         }
@@ -183,23 +184,23 @@ public class Safe {
 
                 c++;
             }
+            if(error){
+                break;
+            }
 
             r++;
         }
 
-        for (int r = 0; r < safeMatrixC.length; r++) {
-            for (int c = 0; c < safeMatrixC[0].length; c++) {
-                Coordinate cell = safeMatrixC[r][c];
+        String response;
 
-                if (cell.getELement().equals(LASER)) {
-                    if (cell.getAdjacentLasers() > 0) {
-
-                    }
-                }
-
-            }
+        if(error){
+            response = "Error verifying at: ("+ r+ ", "+ c+ ")";
+        }else{
+            response = "Safe is fully verified!";
         }
-        return true;
+
+        lasersPTUI.update(this, response);
+      
     }
 
     /**
@@ -361,7 +362,7 @@ public class Safe {
         }
 
         /**
-         * This method add and remove beams
+         * This method adds and removes beams
          * 
          * @param e      the element to update the cell with
          * @param laser  the lazer to wich this beam depent
@@ -373,7 +374,7 @@ public class Safe {
             boolean r = false;
             // when its a free spot or beam/ we add the new laze depency and change the
             // symbol to a bea
-            // when its a laze we just add the depency and check the adjacent cells
+            // when its a laser we just add the depency and check the adjacent cells
             // only a pilar can stop a lazer's trajectory
 
             if (action > 0) {
@@ -387,6 +388,8 @@ public class Safe {
                     laser.setAdjacentLasers(laser.getAdjacentLasers() + 1);
                     r = true;
                 } else if (PILLARS.contains(element)) {
+                    System.out.println("ADD PILLAR at " + row +" " + col);
+
                     adjacentPillarNumber += 1;
                 }
             } else {
@@ -404,6 +407,7 @@ public class Safe {
                     this.setAdjacentLasers(this.getAdjacentLasers() - 1);
                     r = true;
                 } else if (PILLARS.contains(element)) {
+                    System.out.println("REMOVE PILLAR at " + row +" " + col);
                     adjacentPillarNumber -= 1;
                 }
             }
