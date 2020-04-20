@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import lasers.ptui.LasersPTUI;
+
 /**
  * This class represent safe
+ * 
  * @author Jude Paulemon
  */
 public class Safe {
@@ -24,18 +26,22 @@ public class Safe {
     String BEAM = "*";
     String PILLARS = "0124X";
     String FREE_SPOT = ".";
+
     /**
      * Creates a safe object
-     * @param safePath path that contains the configuration to build a safe
+     * 
+     * @param safePath   path that contains the configuration to build a safe
      * @param lasersPTUI the PTUI that will interact with this model
      */
     public Safe(String safePath, LasersPTUI lasersPTUI) {
         this.lasersPTUI = lasersPTUI;
         createSafe(safePath);
     }
+
     /**
-     * Reads a file and build a matrix from the file.
-     * This method loads the safe and the safe solution into two distinct matrices
+     * Reads a file and build a matrix from the file. This method loads the safe and
+     * the safe solution into two distinct matrices
+     * 
      * @param safePath path that contains the configuration to build a safe
      */
     public void createSafe(String safePath) {
@@ -101,8 +107,10 @@ public class Safe {
             e.printStackTrace();
         }
     }
+
     /**
      * adds lazer at the given coordinates
+     * 
      * @param row
      * @param col
      */
@@ -120,8 +128,10 @@ public class Safe {
 
         lasersPTUI.update(this, response);
     }
- /**
+
+    /**
      * removes lazer at the given coordinates
+     * 
      * @param row
      * @param col
      */
@@ -139,16 +149,58 @@ public class Safe {
         lasersPTUI.update(this, response);
 
     }
-    
+
     /**
      * verifies that a safe is correct
+     * 
      * @return true if safe is correct, false otherwise
      */
     public boolean verify() {
+        boolean error = false;
+        int r = 0;
+        int c;
+        while (r < safeMatrixC.length && !error) {
+            c = 0;
+            while (c < safeMatrixC[0].length) {
+                Coordinate cell = safeMatrixC[r][c];
+                String element = cell.getELement();
+                if (element.equals(LASER)) {
+                    if (cell.getAdjacentLasers() > 0) {
+                        error = true;
+                        break;
+                    }
+                } else if (PILLARS.contains(element)) {
+                    if (!element.equals("X")) {
+                        if (cell.getAdjacentLasers() != cell.getPillarNumber()) {
+                            error = true;
+                            break;
+                        }
+                    }
+                } else if (!element.equals(BEAM)) {
+                    error = true;
+                    break;
+                }
+
+                c++;
+            }
+
+            r++;
+        }
+
+        for (int r = 0; r < safeMatrixC.length; r++) {
+            for (int c = 0; c < safeMatrixC[0].length; c++) {
+                Coordinate cell = safeMatrixC[r][c];
+
+                if (cell.getELement().equals(LASER)) {
+                    if (cell.getAdjacentLasers() > 0) {
+
+                    }
+                }
+
+            }
+        }
         return true;
     }
-
-  
 
     /**
      * when a lazer is added this method adds beam on the cells that Vertically
@@ -241,6 +293,10 @@ public class Safe {
     public class Coordinate {
         private int row, col;
         private String element;
+        private int adjacentLasers = 0;
+        private int pillarNumber = 0;
+        private int adjacentPillarNumber = 0;
+
         private ArrayList<Coordinate> laserDepency = new ArrayList<>();
 
         /**
@@ -254,6 +310,14 @@ public class Safe {
             this.row = row;
             this.col = col;
             this.element = element;
+
+            if (PILLARS.contains(element)) {
+                if (element.equals("X")) {
+                    pillarNumber = -1;
+                } else {
+                    pillarNumber = Integer.parseInt(element);
+                }
+            }
         }
 
         /**
@@ -311,6 +375,7 @@ public class Safe {
             // symbol to a bea
             // when its a laze we just add the depency and check the adjacent cells
             // only a pilar can stop a lazer's trajectory
+
             if (action > 0) {
 
                 if (element.equals(FREE_SPOT) || element.equals(BEAM)) {
@@ -319,7 +384,10 @@ public class Safe {
                     r = true;
                 } else if (element.equals(LASER)) {
                     laserDepency.add(laser);
+                    laser.setAdjacentLasers(laser.getAdjacentLasers() + 1);
                     r = true;
+                } else if (PILLARS.contains(element)) {
+                    adjacentPillarNumber += 1;
                 }
             } else {
                 if (element.equals(BEAM)) {
@@ -333,11 +401,38 @@ public class Safe {
                     r = true;
                 } else if (element.equals(LASER)) {
                     laserDepency.remove(laserDepency.size() - 1);
+                    this.setAdjacentLasers(this.getAdjacentLasers() - 1);
                     r = true;
+                } else if (PILLARS.contains(element)) {
+                    adjacentPillarNumber -= 1;
                 }
             }
 
             return r;
+        }
+
+        public int getAdjacentLasers() {
+            return adjacentLasers;
+        }
+
+        public void setAdjacentLasers(int adjacentLasers) {
+            this.adjacentLasers = adjacentLasers;
+        }
+
+        public int getPillarNumber() {
+            return pillarNumber;
+        }
+
+        public void setPillarNumber(int pillarNumber) {
+            this.pillarNumber = pillarNumber;
+        }
+
+        public int getAdjacentPillarNumber() {
+            return adjacentPillarNumber;
+        }
+
+        public void setAdjacentPillarNumber(int adjacentPillarNumber) {
+            this.adjacentPillarNumber = adjacentPillarNumber;
         }
 
     }

@@ -81,7 +81,7 @@ public class LasersPTUI {
         }
     }
 
-    public void update(Safe model, String status) {
+    public static void update(Safe model, String status) {
         // TODO Auto-generated method stub
 
         if(status != null){
@@ -147,7 +147,7 @@ public class LasersPTUI {
                 safe.verify();
                 break;
             case "d":
-                printMatrix(safe);
+                update(safe,null);
                 break;
             case "q":
                 System.exit(0);
