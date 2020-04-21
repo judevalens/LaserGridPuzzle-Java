@@ -180,14 +180,19 @@ public class LasersPTUI {
             String initial = commands[index].substring(0, 1).toLowerCase();
 
             if (!commandList.contains(initial)) {
-                System.out.println("Unrecognized command: " + commands[index]);
-                System.exit(1);
+                update(null, "Unrecognized command: " + commands[index]);
+                isCommandValid  = false;
             } else if (initial.equals("a") || initial.equals("r")) {
                 if (commands.length != (3 + index)) {
-                    System.out.println("Incorrect coordinates");
-                    System.exit(1);
+                    update(null, "Incorrect coordinates");
+                    isCommandValid  = false;
+
                 }
             }
+
+            if(isCommandValid){
+
+            
 
             switch (initial) {
                 case "a":
@@ -211,9 +216,11 @@ public class LasersPTUI {
                     break;
 
             }
+
+        }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Invalid number a argument");
-            e.printStackTrace();
+            update(null, "Invalid number a argument");
+            //e.printStackTrace();
         }
 
     }
