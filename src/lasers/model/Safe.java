@@ -24,7 +24,7 @@ public class Safe {
 
     String LASER = "L";
     String BEAM = "*";
-    String PILLARS = "0124X";
+    String PILLARS = "01234X";
     String FREE_SPOT = ".";
 
     /**
@@ -166,18 +166,21 @@ public class Safe {
                 String element = cell.getELement();
                 if (element.equals(LASER)) {
                     if (cell.getAdjacentLasers() > 0) {
+                        System.out.println("TOO MANY ADJACENT LASERS");
                         error = true;
                         break;
                     }
                 } else if (PILLARS.contains(element)) {
                     if (!element.equals("X")) {
-                        if (cell.getAdjacentLasers() != cell.getPillarNumber()) {
-                            System.out.println(" AdjacentLasers " + cell.getAdjacentLasers() + "PillarNumber " + cell.getPillarNumber());
+                        if (cell.getAdjacentPillarNumber() != cell.getPillarNumber()) {
+                            System.out.println(" AdjacentLasers " + cell.getAdjacentPillarNumber() + " PillarNumber " + cell.getPillarNumber());
                             error = true;
                             break;
                         }
                     }
                 } else if (!element.equals(BEAM)) {
+                    System.out.println("ITS A DOT");
+
                     error = true;
                     break;
                 }
@@ -384,13 +387,20 @@ public class Safe {
                     laserDepency.add(laser);
                     r = true;
                 } else if (element.equals(LASER)) {
+                    System.out.println("ADD LAZER at " + row + " " + col);
+                    laser.setAdjacentLasers(laser.getAdjacentLasers()+1);
                     laserDepency.add(laser);
-                    laser.setAdjacentLasers(laser.getAdjacentLasers() + 1);
+                    adjacentLasers++;
                     r = true;
                 } else if (PILLARS.contains(element)) {
-                    System.out.println("ADD PILLAR at " + row +" " + col);
+                    int lDistance = (Math.abs(this.row - laser.getRow())) ;
+                    int hDistance = (Math.abs(this.col - laser.getCol()));
 
-                    adjacentPillarNumber += 1;
+                    if(lDistance == 1 || hDistance == 1){
+                        System.out.println("ADD PILLAR at " + row +" " + col+ " ldistance " + lDistance + " hdistance "+hDistance);
+
+                        adjacentPillarNumber += 1;
+                    }
                 }
             } else {
                 if (element.equals(BEAM)) {
@@ -403,17 +413,27 @@ public class Safe {
                     }
                     r = true;
                 } else if (element.equals(LASER)) {
+                    System.out.println("REMOVE LAZER at " + row + " " + col);
                     laserDepency.remove(laserDepency.size() - 1);
-                    this.setAdjacentLasers(this.getAdjacentLasers() - 1);
+                    laser.setAdjacentLasers(laser.getAdjacentLasers()-1);
+                    adjacentLasers -= 1;
                     r = true;
                 } else if (PILLARS.contains(element)) {
-                    System.out.println("REMOVE PILLAR at " + row +" " + col);
-                    adjacentPillarNumber -= 1;
+                    int lDistance = (Math.abs(this.row - laser.getRow())) ;
+                    int hDistance = (Math.abs(this.col - laser.getCol()));
+
+                    if(lDistance == 1 || hDistance == 1){
+                        System.out.println("ADD PILLAR at " + row +" " + col+ " ldistance " + lDistance + " hdistance "+hDistance);
+                       adjacentPillarNumber -= 1;
+                    }
                 }
             }
 
             return r;
         }
+
+
+        
 
         public int getAdjacentLasers() {
             return adjacentLasers;
@@ -431,6 +451,14 @@ public class Safe {
             this.pillarNumber = pillarNumber;
         }
 
+        public int getRow() {
+            return row;
+        }
+
+        public int getCol() {
+            return col;
+        }
+
         public int getAdjacentPillarNumber() {
             return adjacentPillarNumber;
         }
@@ -438,6 +466,7 @@ public class Safe {
         public void setAdjacentPillarNumber(int adjacentPillarNumber) {
             this.adjacentPillarNumber = adjacentPillarNumber;
         }
+
 
     }
 
