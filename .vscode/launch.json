@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "lasers.ptui.LasersPTUI",
             "projectName": "csx-20195-project2a-lasers-jvp3923_c3e54d4b",
-            "args": "14x14safe.txt"
+            "args": "safe.1 input.1"
         }
     ]
 }

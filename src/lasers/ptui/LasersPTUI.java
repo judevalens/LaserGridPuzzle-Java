@@ -148,22 +148,25 @@ public class LasersPTUI {
 
                 }
                 inputType = 1;
+                update(null, null);
                 sc.close();
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }else{
+            sc = new Scanner(System.in);
+            if (sc.hasNextLine()) {
+                command = sc.nextLine().toLowerCase();
+                commands = command.split(" ");
+                excutor(commands, 1);
+    
+            }
+            sc.close();
+    
         }
 
-        sc = new Scanner(System.in);
-        if (sc.hasNextLine()) {
-            command = sc.nextLine().toLowerCase();
-            commands = command.split(" ");
-            excutor(commands, 1);
-
-        }
-        sc.close();
-
+        
     }
 
     /**
