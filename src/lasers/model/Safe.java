@@ -104,7 +104,9 @@ public class Safe {
             myReader.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("File cannot be found");
+            System.exit(1);
+            //e.printStackTrace();
         }
     }
 
@@ -434,7 +436,9 @@ public class Safe {
 
 
         
-
+        /**
+         * Getters and setter
+        **/
         public int getAdjacentLasers() {
             return adjacentLasers;
         }
