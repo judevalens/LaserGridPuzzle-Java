@@ -46,11 +46,11 @@ public class LasersPTUI {
             if (args.length == 1) {
                 new LasersPTUI(args[0], null);
                 inputType = 1;
-                input(null);
+                update(null, null);
             } else {
                 new LasersPTUI(args[0], args[1]);
                 input(args[1]);
-                input(null);
+                update(null, null);
             }
         }
     }
@@ -117,6 +117,7 @@ public class LasersPTUI {
         }
 
         if (inputType == 1) {
+            System.out.print("> ");
             input(null);
         }
 
@@ -177,50 +178,48 @@ public class LasersPTUI {
         String badCommand = "";
 
         try {
-            String initial = commands[index].substring(0, 1).toLowerCase();
+            String initial = commands[0].substring(0, 1).toLowerCase();
 
             if (!commandList.contains(initial)) {
-                update(null, "Unrecognized command: " + commands[index]);
-                isCommandValid  = false;
+                update(null, "Unrecognized command: " + commands[0]);
+                isCommandValid = false;
             } else if (initial.equals("a") || initial.equals("r")) {
-                if (commands.length != (3 + index)) {
+                if (commands.length != (3)) {
                     update(null, "Incorrect coordinates");
-                    isCommandValid  = false;
+                    isCommandValid = false;
 
                 }
             }
 
-            if(isCommandValid){
+            if (isCommandValid) {
 
-            
+                switch (initial) {
+                    case "a":
+                        safe.addLaser(Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
+                        break;
+                    case "r":
+                        safe.removeLaser(Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
+                        break;
+                    case "v":
+                        safe.verify();
+                        break;
+                    case "d":
+                        update(safe, null);
+                        break;
+                    case "q":
+                        System.exit(0);
+                    case "h":
+                        printHelp();
 
-            switch (initial) {
-                case "a":
-                    safe.addLaser(Integer.parseInt(commands[index + 1]), Integer.parseInt(commands[index + 2]));
-                    break;
-                case "r":
-                    safe.removeLaser(Integer.parseInt(commands[index + 1]), Integer.parseInt(commands[index + 2]));
-                    break;
-                case "v":
-                    safe.verify();
-                    break;
-                case "d":
-                    update(safe, null);
-                    break;
-                case "q":
-                    System.exit(0);
-                case "h":
-                    printHelp();
+                        update(null, null);
+                        break;
 
-                    update(null, null);
-                    break;
+                }
 
             }
-
-        }
         } catch (ArrayIndexOutOfBoundsException e) {
             update(null, "Invalid number a argument");
-            //e.printStackTrace();
+            // e.printStackTrace();
         }
 
     }
